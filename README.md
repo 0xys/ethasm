@@ -1,5 +1,6 @@
 # Solidity Assembler
 
+## Example code
 ```
 push1 0x80
 push1 0x40
