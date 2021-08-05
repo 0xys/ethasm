@@ -60,7 +60,7 @@ let outCode = '';
 for (const code of out) {
     if(code.startsWith('@')){
         const tag = code.slice(1);
-        if(tagMap[tag] < 16){
+        if(tagMap[tag] < 256){
             outCode += '00'+Buffer.from([tagMap[tag]]).toString('hex');
         }else{
             outCode += Buffer.from([tagMap[tag]]).toString('hex');
