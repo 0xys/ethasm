@@ -14,12 +14,19 @@ dup1
 revert
 @tag:
 pop
+push1 0x40
+mload
+dup1
 push1 0x01
+swap1
+mstore
+push1 0x20
+swap1
 return
 stop
 ```
 
 ```
 npm start <FILE_PATH> 
-6080604052348015611057600080fd5b506001f300
+6080604052348015611057600080fd5b506040518060019052602090f300
 ```
