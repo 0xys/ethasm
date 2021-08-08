@@ -5,18 +5,17 @@
 push1 0x80      // start code
 push1 0x40
 mstore   
-callvalue       // call value       
-dup1
-iszero   
 
-// if callvalue != zero, revert
+// if callvalue == zero, jump to @tag, revert otherwise.
+callvalue
+dup1
+iszero
 push @tag    
 jumpi
 push1 0x00
 dup1
 revert
 
-// if callvalue is zero
 jumpdest @tag
     pop
     push1 0x40
