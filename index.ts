@@ -26,6 +26,10 @@ for (const line of lines) {
         const instruction = parseJumpdest(line, lineNumber);
         instructions.push(instruction);
     }else{
+        if(!line){
+            lineNumber++;
+            continue;
+        }
         const opcode = fromMnemonic[line];
         assert(!!opcode, `opcode ${line} not found at line ${lineNumber}.`);
         const instruction: Instruction = {
