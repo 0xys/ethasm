@@ -3,15 +3,17 @@ import { assert } from './src/assert';
 import { Instruction, parseJumpdest, parsePushOperator } from './src/instruction';
 import { fromMnemonic } from './src/mapping';
 import { TagToOffsetMapping } from './src/models';
+import { sanitize } from './src/sanitizer';
 
 const inPath = process.argv[2];
 const outPath = '';
 
 const inFile = readFileSync(inPath, 'utf-8').toUpperCase();
+const sanitized = sanitize(inFile);
 
 const tagMap: TagToOffsetMapping = {};
 
-const lines = inFile.split('\n');
+const lines = sanitized.split('\n');
 let lineNumber = 1;
 
 /// parse instructions
