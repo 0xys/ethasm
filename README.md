@@ -18,16 +18,17 @@ revert
 
 // if callvalue is zero
 jumpdest @tag
-pop
-push1 0x40
-mload
-dup1
-push1 0x01
-swap1
-mstore
-push1 0x20
-swap1
-return
+    pop
+    push1 0x40
+    mload
+    dup1
+    push1 0x01
+    swap1
+    mstore
+    push1 0x20
+    swap1
+    return
+
 stop
 ```
 
