@@ -11,6 +11,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bn.js": "^5.1.0",
     "@types/node": "^16.4.12"
+  },
+  "dependencies": {
+    "bn.js": "^5.2.0"
   }
 }

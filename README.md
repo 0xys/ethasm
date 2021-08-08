@@ -13,7 +13,7 @@ jumpi
 push1 0x00
 dup1
 revert
-@tag:
+jumpdest @tag
 pop
 push1 0x40
 mload
