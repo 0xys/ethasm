@@ -4,6 +4,7 @@ import { Instruction, parseJumpdest, parsePushOperator } from './src/instruction
 import { fromGlobalTag, fromMnemonic } from './src/mapping';
 import { TagToOffsetMapping } from './src/models';
 import { sanitize } from './src/sanitizer';
+import BN from 'bn.js';
 
 const inPath = process.argv[2];
 const outPath = '';
@@ -81,5 +82,9 @@ for (const instruction of instructions){
         outCode += instruction.opcode.uint8;
     }
 }
+
+// finalize
+const codeSizeHex = new BN(outCode.length/2).toString('hex', 4).toUpperCase();
+outCode = outCode.replaceAll('CDSZ', codeSizeHex);
 
 console.log(outCode);
