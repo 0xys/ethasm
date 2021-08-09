@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { assert } from './src/assert';
 import { Instruction, parseJumpdest, parsePushOperator } from './src/instruction';
-import { fromMnemonic } from './src/mapping';
+import { fromGlobalTag, fromMnemonic } from './src/mapping';
 import { TagToOffsetMapping } from './src/models';
 import { sanitize } from './src/sanitizer';
 
@@ -71,6 +71,10 @@ for (const instruction of instructions){
         }else{
             outCode += Buffer.from([tagMap[tag]]).toString('hex');
         }
+    }else if(instruction.type == 'PUSH_GLOBAL'){
+        outCode += instruction.opcode.uint8;
+        const tag = instruction.params[0];
+        outCode += fromGlobalTag[tag];
     }else if(instruction.type == 'JUMPDEST'){   // JUMPDEST @tag
         outCode += instruction.opcode.uint8;
     }else if(instruction.type == 'GENERAL'){    // OPCODE

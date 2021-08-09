@@ -1099,3 +1099,12 @@ export const fromMnemonic: FromMnemonicMapping = {
     },
     
 }
+
+type FromGlobalTagMapping = {
+    [key: string]: string
+}
+export const fromGlobalTag: FromGlobalTagMapping = {
+    '@RUNTIMELENGTH': 'RT_L',
+    '@RUNTIMEOFFSET': 'RT_O',
+    '@CODESIZE': 'CDSZ',
+}

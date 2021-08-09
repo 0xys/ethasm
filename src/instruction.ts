@@ -10,7 +10,7 @@ export interface Instruction {
     params: string[]
 }
 
-type InstructionType = 'GENERAL'|'PUSH'|'PUSH_TAG'|'JUMPDEST';
+type InstructionType = 'GENERAL'|'PUSH'|'PUSH_TAG'|'PUSH_GLOBAL'|'JUMPDEST';
 
 /**
  * 
@@ -27,6 +27,15 @@ export const parsePushOperator = (line: string, at: number): Instruction => {
     if(type == 'JumpTag'){
         return {
             type: 'PUSH_TAG',
+            opcode: fromMnemonic['PUSH2'],
+            params: [operand],
+            size: 3
+        };
+    }
+
+    if(type == 'CodeSize' || type == 'RuntimeLength' || type == 'RuntimeOffset'){
+        return {
+            type: 'PUSH_GLOBAL',
             opcode: fromMnemonic['PUSH2'],
             params: [operand],
             size: 3
@@ -57,7 +66,7 @@ export const parsePushOperator = (line: string, at: number): Instruction => {
     }
 }
 
-type PushType = 'Value'|'JumpTag';
+type PushType = 'Value'|'JumpTag'|'CodeSize'|'RuntimeLength'|'RuntimeOffset';
 const parsePushOperand = (operand: string): { operand: string, type: PushType } => {
     if(operand.startsWith('0x')){
         return {
@@ -67,7 +76,7 @@ const parsePushOperand = (operand: string): { operand: string, type: PushType } 
     }else if(operand.startsWith('@')){
         return { 
             operand,
-            type: 'JumpTag'
+            type: classifyTag(operand)
         };
     }else{
         const num = parseInt(operand);
@@ -83,6 +92,18 @@ const parsePushOperand = (operand: string): { operand: string, type: PushType } 
                 type: 'Value'
             };
         }
+    }
+}
+
+const classifyTag = (tag: string): PushType => {
+    if(tag == '@RUNTIMELENGTH'){
+        return 'RuntimeLength';
+    }else if(tag == '@RUNTIMEOFFSET'){
+        return 'RuntimeOffset';
+    }else if(tag == '@CODESIZE'){
+        return 'CodeSize';
+    }else{
+        return 'JumpTag';
     }
 }
 
