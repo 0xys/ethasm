@@ -1,0 +1,84 @@
+//
+// contract Contract {
+//     uint public a = 0x01;    
+// }
+//
+
+// deploytime
+push 0x80
+push1 0x40
+mstore
+callvalue
+dup1
+iszero
+push @deploy
+jumpi
+push 0x00
+dup1
+revert
+
+@deploy
+    jumpdest 
+    pop         //  remove unused callvalue
+    push 0x01
+    push 0x00
+    sstore      //  store 0x01 at slot 0x00
+    push @runtimeLength //  runtime length
+    dup2
+    push @runtime
+    push 0x00
+    codecopy
+    push 0x00
+    return
+
+@runtime
+push1 0x80
+push1 0x40
+mstore
+callvalue
+dup1
+iszero
+push @hub
+jumpi
+push 0x00
+dup1
+revert
+
+@hub
+    jumpdest
+    pop     // remove unused callvalue
+    push1 0x04
+    calldatasize
+    lt
+    push @calldatasize_too_small
+    jumpi
+
+    // hub
+    push1 0x00
+    calldataload
+    push1 0xe0
+    SHR
+    dup1
+    push4 0x0dbe671f
+    eq
+    push @a
+    jumpi
+
+@calldatasize_too_small
+    jumpdest
+    push 0x00
+    dup1
+    revert
+
+@a
+    jumpdest
+    push1 0x20
+    push1 0x00
+    dup1
+    dup1
+    sload
+    swap1
+    mstore
+    return
+
+stop
