@@ -5,12 +5,12 @@ import { assert } from "./assert";
 
 export interface Instruction {
     type: InstructionType,
-    opcode: OpCode,
+    opcode?: OpCode,
     size: number,
     params: string[]
 }
 
-type InstructionType = 'GENERAL'|'PUSH'|'PUSH_TAG'|'PUSH_GLOBAL'|'JUMPDEST';
+type InstructionType = 'GENERAL'|'PUSH'|'PUSH_TAG'|'PUSH_GLOBAL'|'TAG';
 
 /**
  * 
@@ -20,11 +20,11 @@ type InstructionType = 'GENERAL'|'PUSH'|'PUSH_TAG'|'PUSH_GLOBAL'|'JUMPDEST';
  */
 export const parsePushOperator = (line: string, at: number): Instruction => {
     const tmp = line.split(' ');
-    assert(tmp.length == 2, `wrong number of params for PUSH instruction. got ${tmp.length} at line ${at}. ${line}`);
+    assert(tmp.length == 2, `wrong number of params for PUSH instruction. got ${tmp.length} at line ${at}. "${line}"`);
     const operator = tmp[0];
     const { operand, type } = parsePushOperand(tmp[1]);
 
-    if(type == 'JumpTag'){
+    if(type == 'Tag'){
         return {
             type: 'PUSH_TAG',
             opcode: fromMnemonic['PUSH2'],
@@ -33,7 +33,7 @@ export const parsePushOperator = (line: string, at: number): Instruction => {
         };
     }
 
-    if(type == 'CodeSize' || type == 'RuntimeLength' || type == 'RuntimeOffset'){
+    if(type == 'CodeSize'){
         return {
             type: 'PUSH_GLOBAL',
             opcode: fromMnemonic['PUSH2'],
@@ -66,7 +66,7 @@ export const parsePushOperator = (line: string, at: number): Instruction => {
     }
 }
 
-type PushType = 'Value'|'JumpTag'|'CodeSize'|'RuntimeLength'|'RuntimeOffset';
+type PushType = 'Value'|'Tag'|'CodeSize';
 const parsePushOperand = (operand: string): { operand: string, type: PushType } => {
     if(operand.startsWith('0x')){
         return {
@@ -96,14 +96,10 @@ const parsePushOperand = (operand: string): { operand: string, type: PushType } 
 }
 
 const classifyTag = (tag: string): PushType => {
-    if(tag == '@RUNTIMELENGTH'){
-        return 'RuntimeLength';
-    }else if(tag == '@RUNTIMEOFFSET'){
-        return 'RuntimeOffset';
-    }else if(tag == '@CODESIZE'){
+    if(tag == '@CODESIZE'){
         return 'CodeSize';
     }else{
-        return 'JumpTag';
+        return 'Tag';
     }
 }
 
@@ -114,17 +110,10 @@ const classifyTag = (tag: string): PushType => {
  * @returns 
  */
 export const parseJumpdest = (line: string, at: number): Instruction => {
-    const tmp = line.split(' ');
-    assert(tmp.length == 2, `wrong number of params for PUSH instruction. got ${tmp.length} at line ${at}. ${line}`);
-    const operator = tmp[0];
-    assert(operator == 'JUMPDEST', `operator must be JUMPDEST here. got ${operator} at line ${at}. ${line}`);
-    const operand = tmp[1];
-    assert(operand.startsWith('@'), `param of JUMPDEST must start with @. got ${operand} at line ${at}. ${line}`);
-
     return {
-        type: 'JUMPDEST',
+        type: 'GENERAL',
         opcode: fromMnemonic['JUMPDEST'],
-        params: [operand],
+        params: [],
         size: 1
     };
 }

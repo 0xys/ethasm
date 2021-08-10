@@ -28,6 +28,13 @@ for (const line of lines) {
     else if(line.startsWith('JUMPDEST')){
         const instruction = parseJumpdest(line, lineNumber);
         instructions.push(instruction);
+    }else if(line.startsWith('@')){
+        const instruction: Instruction = {
+            type: 'TAG',
+            params: [line.trim()],
+            size: 0     // tag is just a tag
+        }
+        instructions.push(instruction);
     }else{
         if(!line){
             lineNumber++;
@@ -49,7 +56,7 @@ for (const line of lines) {
 /// create tag map
 let pc = 0;
 for (const instruction of instructions){
-    if(instruction.type == 'JUMPDEST'){
+    if(instruction.type == 'TAG'){
         if(!instruction.params){
             throw new Error(`unexpected error at instruction ${JSON.stringify(instruction)}`);
         }
@@ -62,24 +69,28 @@ for (const instruction of instructions){
 let outCode = '';
 for (const instruction of instructions){
     if(instruction.type == 'PUSH'){             //  PUSHx 0x...
-        outCode += instruction.opcode.uint8;
+        outCode += instruction.opcode?.uint8;
         outCode += instruction.params[0];
     }else if(instruction.type == 'PUSH_TAG'){   //  PUSH2 @tag
-        outCode += instruction.opcode.uint8;
+        outCode += instruction.opcode?.uint8;
         const tag = instruction.params[0];
+        if(!tagMap[tag]){
+            throw new Error(`tag '${tag} not defined.'`);
+        }
+
         if(tagMap[tag] < 256){
             outCode += '00'+Buffer.from([tagMap[tag]]).toString('hex');
         }else{
             outCode += Buffer.from([tagMap[tag]]).toString('hex');
         }
     }else if(instruction.type == 'PUSH_GLOBAL'){
-        outCode += instruction.opcode.uint8;
+        outCode += instruction.opcode?.uint8;
         const tag = instruction.params[0];
         outCode += fromGlobalTag[tag];
-    }else if(instruction.type == 'JUMPDEST'){   // JUMPDEST @tag
-        outCode += instruction.opcode.uint8;
+    }else if(instruction.type == 'TAG'){        //  @tag
+        continue;
     }else if(instruction.type == 'GENERAL'){    // OPCODE
-        outCode += instruction.opcode.uint8;
+        outCode += instruction.opcode?.uint8;
     }
 }
 
