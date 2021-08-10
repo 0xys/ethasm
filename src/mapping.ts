@@ -1105,6 +1105,5 @@ type FromGlobalTagMapping = {
 }
 export const fromGlobalTag: FromGlobalTagMapping = {
     '@RUNTIMELENGTH': 'RT_L',
-    '@RUNTIMEOFFSET': 'RT_O',
     '@CODESIZE': 'CDSZ',
 }

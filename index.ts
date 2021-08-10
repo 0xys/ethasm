@@ -95,7 +95,14 @@ for (const instruction of instructions){
 }
 
 // finalize
-const codeSizeHex = new BN(outCode.length/2).toString('hex', 4).toUpperCase();
+const codeSize = outCode.length/2;
+const codeSizeHex = new BN(codeSize).toString('hex', 4).toUpperCase();
 outCode = outCode.replaceAll('CDSZ', codeSizeHex);
+
+if(tagMap['@RUNTIME']){
+    const runtimeLength = codeSize - tagMap['@RUNTIME']
+    const runtimeLengthHex = new BN(runtimeLength).toString('hex', 4).toUpperCase();
+    outCode = outCode.replaceAll('RT_L', runtimeLengthHex);
+}
 
 console.log(outCode);

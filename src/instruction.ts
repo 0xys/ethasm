@@ -33,7 +33,7 @@ export const parsePushOperator = (line: string, at: number): Instruction => {
         };
     }
 
-    if(type == 'CodeSize'){
+    if(type == 'CodeSize' || type == 'RuntimeLength'){
         return {
             type: 'PUSH_GLOBAL',
             opcode: fromMnemonic['PUSH2'],
@@ -66,7 +66,7 @@ export const parsePushOperator = (line: string, at: number): Instruction => {
     }
 }
 
-type PushType = 'Value'|'Tag'|'CodeSize';
+type PushType = 'Value'|'Tag'|'CodeSize'|'RuntimeLength';
 const parsePushOperand = (operand: string): { operand: string, type: PushType } => {
     if(operand.startsWith('0x')){
         return {
@@ -98,6 +98,8 @@ const parsePushOperand = (operand: string): { operand: string, type: PushType } 
 const classifyTag = (tag: string): PushType => {
     if(tag == '@CODESIZE'){
         return 'CodeSize';
+    }else if(tag == '@RUNTIMELENGTH'){
+        return 'RuntimeLength';
     }else{
         return 'Tag';
     }
