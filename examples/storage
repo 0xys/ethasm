@@ -1,6 +1,6 @@
 //
 // contract Contract {
-//     uint public a = 0x01;    
+//     uint public a = 0x10000123;    
 // }
 //
 
@@ -19,12 +19,11 @@ revert
 
 @deploy
     jumpdest 
-    pop         //  remove unused callvalue
-    push 0x01
+    push 0x10000123
     push 0x00
     sstore      //  store 0x01 at slot 0x00
     push @runtimeLength //  runtime length
-    dup2
+    dup1
     push @runtime
     push 0x00
     codecopy
@@ -78,7 +77,7 @@ revert
     dup1
     sload
     swap1
-    mstore
+    mstore  // [offset][value]: memory[offset:offset+32] = value
     return
 
 stop
