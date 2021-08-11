@@ -55,12 +55,23 @@ for (const line of lines) {
 
 /// create tag map
 let pc = 0;
+let afterRuntimeTag = false;
 for (const instruction of instructions){
+    // console.log(pc, ":", instruction.opcode?.mnemonic)
     if(instruction.type == 'TAG'){
         if(!instruction.params){
             throw new Error(`unexpected error at instruction ${JSON.stringify(instruction)}`);
         }
-        tagMap[instruction.params[0]] = pc;
+        if(afterRuntimeTag){
+            const runtimeTagOffset = tagMap['@RUNTIME'];
+            tagMap[instruction.params[0]] = pc - runtimeTagOffset;
+        }else{
+            tagMap[instruction.params[0]] = pc;
+            if(instruction.params[0] == '@RUNTIME'){
+                afterRuntimeTag = true;
+            }
+        }
+        // console.log(' -',tagMap[instruction.params[0]]);
     }
     pc += instruction.size;
 }
