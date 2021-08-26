@@ -15,7 +15,7 @@
     "ethasm": "./bin/ethasm.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "0xys",
   "license": "ISC",
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
