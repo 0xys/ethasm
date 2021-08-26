@@ -1,18 +1,30 @@
 {
-  "name": "solidity-assembler",
-  "version": "1.0.0",
-  "description": "",
+  "name": "ethasm",
+  "version": "0.0.1",
+  "description": "EVM(Ethereum Virtual Machine) opcode assembler",
   "main": "index.js",
   "scripts": {
+    "prepare": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.dev.js --watch",
     "test": "tsc && node ./dist/test.js",
-    "start": "tsc && node ./dist/index.js"
+    "start": "tsc && node ./dist/index.js",
+    "build:prod": "webpack --mode production",
+    "build:dev": "webpack --mode development"
+  },
+  "bin": {
+    "ethasm": "./bin/ethasm.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
-    "@types/node": "^16.4.12"
+    "@types/node": "^16.4.12",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.3.5",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0",
+    "webpack-merge": "^5.8.0"
   },
   "dependencies": {
     "bn.js": "^5.2.0"
