@@ -1,4 +1,7 @@
-# Solidity Assembler
+# EVM assembler
+```
+ethasm <file_name>
+```
 
 ## Example code
 ```
