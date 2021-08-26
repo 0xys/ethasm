@@ -1,6 +1,6 @@
 {
   "name": "ethasm",
-  "version": "0.0.1-test-1",
+  "version": "0.0.1-test-2",
   "description": "EVM(Ethereum Virtual Machine) opcode assembler",
   "main": "index.js",
   "scripts": {
@@ -14,9 +14,9 @@
   "bin": {
     "ethasm": "./bin/ethasm.js"
   },
-  "keywords": [],
+  "keywords": ["Ethereum", "Solidity", "EVM"],
   "author": "0xys",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
     "@types/node": "^16.4.12",
