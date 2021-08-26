@@ -1,4 +1,5 @@
 # EVM assembler
+![GitHub](https://img.shields.io/github/license/0xys/ethasm)
 ```
 ethasm <file_name>
 ```
