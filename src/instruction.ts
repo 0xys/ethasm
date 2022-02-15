@@ -68,9 +68,9 @@ export const parsePushOperator = (line: string, at: number): Instruction => {
 
 type PushType = 'Value'|'Tag'|'CodeSize'|'RuntimeLength';
 const parsePushOperand = (operand: string): { operand: string, type: PushType } => {
-    if(operand.startsWith('0x')){
+    if(operand.startsWith('0x') || operand.startsWith('0X')){
         return {
-            operand: operand.slice(2),
+            operand: operand.slice(2).toLowerCase(),
             type: 'Value'
         };
     }else if(operand.startsWith('@')){
